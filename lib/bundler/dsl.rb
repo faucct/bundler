@@ -38,7 +38,9 @@ module Bundler
       original_gemfile = @gemfile
       @gemfile = expanded_gemfile_path
       contents ||= Bundler.read_file(gemfile.to_s)
-      instance_eval(contents.dup.untaint, gemfile.to_s, 1)
+      SharedHelpers.chdir(File.dirname(expanded_gemfile_path)) do
+        instance_eval(contents.dup.untaint, gemfile.to_s, 1)
+      end
     rescue Exception => e
       message = "There was an error " \
         "#{e.is_a?(GemfileEvalError) ? "evaluating" : "parsing"} " \
