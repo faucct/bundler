@@ -133,7 +133,7 @@ module Bundler
 
       def lockfile_path
         return relative_path(original_path) if original_path.absolute?
-        expand(original_path).relative_path_from(Bundler.root)
+        expand(original_path).relative_path_from(root_path)
       end
 
       def app_cache_path(custom_path = nil)
