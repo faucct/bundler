@@ -57,7 +57,7 @@ module Bundler
       @dependencies    = dependencies
       @sources         = sources
       @unlock          = unlock
-      @optional_groups = optional_groups
+      @optional_groups = optional_groups.map(&:to_sym)
       @remote          = false
       @specs           = nil
       @ruby_version    = ruby_version
