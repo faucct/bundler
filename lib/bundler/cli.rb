@@ -33,7 +33,7 @@ module Bundler
     def initialize(*args)
       super
 
-      custom_gemfile = options[:gemfile] || Bundler.settings[:gemfile]
+      custom_gemfile = options[:gemfile]
       if custom_gemfile && !custom_gemfile.empty?
         Bundler::SharedHelpers.set_env "BUNDLE_GEMFILE", File.expand_path(custom_gemfile)
         Bundler.reset_paths!

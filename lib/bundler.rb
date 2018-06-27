@@ -526,6 +526,13 @@ EOF
     end
 
     def configure_gem_home_and_path
+      if !ENV["BUNDLE_GEMFILE"] || ENV["BUNDLE_GEMFILE"].empty?
+        custom_gemfile = settings[:gemfile]
+        if custom_gemfile && !custom_gemfile.empty?
+          Bundler::SharedHelpers.set_env "BUNDLE_GEMFILE", File.expand_path(custom_gemfile)
+          Bundler.reset_paths!
+        end
+      end
       configure_gem_path
       configure_gem_home
       bundle_path

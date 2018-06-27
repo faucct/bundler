@@ -314,6 +314,41 @@ RSpec.describe "Bundler.setup" do
         expect(out).to eq("WIN")
       end
     end
+
+    context "gemfile is configured and BUNDLE_GEMFILE is not" do
+      it "uses settings to locate the gemfile" do
+        gemfile bundled_app("foo"), "puts 'FOO'"
+        gemfile bundled_app("bar"), "puts 'BAR'"
+        config "BUNDLE_GEMFILE" => "foo/Gemfile"
+
+        bundle "install"
+
+        ruby <<-R
+          require 'bundler'
+
+          Bundler.setup
+        R
+
+        expect(out).to eq("FOO")
+      end
+    end
+
+    context "gemfile is configured and BUNDLE_GEMFILE is too" do
+      it "uses settings to locate the gemfile" do
+        gemfile bundled_app("foo"), "puts 'FOO'"
+        gemfile bundled_app("bar"), "puts 'BAR'"
+        config "BUNDLE_GEMFILE" => "foo/Gemfile"
+        ENV["BUNDLE_GEMFILE"] = "bar/Gemfile"
+
+        ruby <<-R
+          require 'bundler'
+
+          Bundler.setup
+        R
+
+        expect(out).to eq("BAR")
+      end
+    end
   end
 
   it "prioritizes gems in BUNDLE_PATH over gems in GEM_HOME" do
